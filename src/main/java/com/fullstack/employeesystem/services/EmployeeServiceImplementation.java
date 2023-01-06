@@ -5,12 +5,9 @@ import com.fullstack.employeesystem.model.Employee;
 import com.fullstack.employeesystem.repository.EmployeeRepository;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 import java.util.stream.Collectors;
 
 @Service
@@ -47,4 +44,24 @@ public class EmployeeServiceImplementation implements EmployeeService{
         employeeRepository.delete(employee);
         return true;
     }
+
+    @Override
+    public Employee getEmployeeById(Long id) {
+        EmployeeEntity employeeEntity = employeeRepository.findById(id).get();
+        Employee employee = new Employee();
+        BeanUtils.copyProperties(employeeEntity, employee);
+        return employee;
+    }
+
+    @Override
+    public Employee updateEmployee(Long id, Employee employee) {
+        EmployeeEntity employeeEntity = employeeRepository.findById(id).get();
+        employeeEntity.setEmail(employee.getEmail());
+        employeeEntity.setFirstName(employee.getFirstName());
+        employeeEntity.setLastName(employee.getLastName());
+        employeeRepository.save(employeeEntity);
+        System.out.println(employee);
+        return employee;
+    }
+
 }
